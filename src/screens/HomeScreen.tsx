@@ -53,7 +53,11 @@ export default function HomeScreen() {
 
         <View style={styles.tabRow}>
           {(['activity', 'report'] as Tab[]).map((t) => (
-            <Pressable key={t} onPress={() => setTab(t)} hitSlop={8}>
+            <Pressable
+              key={t}
+              onPress={() => setTab(t)}
+              style={[styles.tabBtn, tab === t && styles.tabBtnActive]}
+            >
               <Text style={[styles.tabText, tab === t && styles.tabTextActive]}>
                 {t === 'activity' ? 'Activity' : 'Report'}
               </Text>
@@ -97,9 +101,18 @@ const styles = StyleSheet.create({
   summaryRow: { flexDirection: 'row', gap: 28, marginTop: 16 },
   summaryLabel: { color: theme.subtext, fontSize: 11, fontWeight: '600', letterSpacing: 1 },
   summaryValue: { color: theme.text, fontSize: 18, fontWeight: '700', marginTop: 2 },
-  tabRow: { flexDirection: 'row', gap: 20, marginTop: 20 },
-  tabText: { color: theme.faint, fontSize: 14, fontWeight: '700' },
-  tabTextActive: { color: theme.text },
+  tabRow: { flexDirection: 'row', gap: 10, marginTop: 20 },
+  tabBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 18,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: theme.border,
+    backgroundColor: theme.card,
+  },
+  tabBtnActive: { backgroundColor: theme.text, borderColor: theme.text },
+  tabText: { color: theme.subtext, fontSize: 13, fontWeight: '700' },
+  tabTextActive: { color: theme.bg },
   banner: {
     marginHorizontal: 16,
     marginBottom: 10,

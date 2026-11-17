@@ -52,7 +52,11 @@ export default function ReportView({ transactions }: { transactions: Transaction
     <ScrollView contentContainerStyle={styles.content}>
       <View style={styles.periodRow}>
         {(['month', 'all'] as Period[]).map((p) => (
-          <Pressable key={p} onPress={() => setPeriod(p)} hitSlop={8}>
+          <Pressable
+            key={p}
+            onPress={() => setPeriod(p)}
+            style={[styles.periodBtn, period === p && styles.periodBtnActive]}
+          >
             <Text style={[styles.periodText, period === p && styles.periodTextActive]}>
               {p === 'month' ? 'This month' : 'All time'}
             </Text>
@@ -94,8 +98,16 @@ export default function ReportView({ transactions }: { transactions: Transaction
 
 const styles = StyleSheet.create({
   content: { paddingHorizontal: 16, paddingBottom: 40 },
-  periodRow: { flexDirection: 'row', gap: 18, marginBottom: 22 },
-  periodText: { color: theme.faint, fontSize: 13, fontWeight: '600' },
+  periodRow: { flexDirection: 'row', gap: 8, marginBottom: 22 },
+  periodBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: theme.border,
+  },
+  periodBtnActive: { borderColor: theme.text },
+  periodText: { color: theme.faint, fontSize: 12, fontWeight: '600' },
   periodTextActive: { color: theme.text },
   totalLabel: { color: theme.subtext, fontSize: 11, fontWeight: '600', letterSpacing: 1 },
   totalValue: { color: theme.text, fontSize: 32, fontWeight: '800', marginTop: 4, marginBottom: 26 },
