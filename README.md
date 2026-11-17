@@ -20,6 +20,10 @@ straight out of the notification, and asks one quick question: *what was this fo
 Nothing is ever uploaded. There is no account, no server, and no network call: every
 transaction lives in a local SQLite database on the phone.
 
+A **Report** tab totals spending per label — this month or all time — so you can see what the
+money actually went on. Anything still untagged is listed separately rather than folded into
+a category, so the totals never quietly understate a category.
+
 ## What it recognises
 
 A notification is treated as a transaction when it comes from a recognised issuer *and*
@@ -80,6 +84,7 @@ src/
   components/
     CategorizeModal.tsx     # the tagging popup
     LabelChip.tsx
+    ReportView.tsx          # spend per label
     TransactionRow.tsx
   db/database.ts            # SQLite schema + queries
   lib/

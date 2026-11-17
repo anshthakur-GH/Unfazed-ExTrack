@@ -2,8 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { AppState, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useTxnStore } from '../store/useTxnStore';
 import TransactionRow from '../components/TransactionRow';
+import ReportView from '../components/ReportView';
 import { theme } from '../lib/theme';
 import { openNotificationAccessSettings } from '../lib/NotificationBridge';
+
+type Tab = 'activity' | 'report';
 
 export default function HomeScreen() {
   const all = useTxnStore((s) => s.all);
@@ -13,6 +16,7 @@ export default function HomeScreen() {
   const listenerEnabled = useTxnStore((s) => s.listenerEnabled);
   const checkListener = useTxnStore((s) => s.checkListener);
   const [refreshing, setRefreshing] = useState(false);
+  const [tab, setTab] = useState<Tab>('activity');
 
   useEffect(() => {
     const sub = AppState.addEventListener('change', (next) => {
@@ -46,6 +50,16 @@ export default function HomeScreen() {
             <Text style={styles.summaryValue}>₹{totalOut.toLocaleString('en-IN')}</Text>
           </View>
         </View>
+
+        <View style={styles.tabRow}>
+          {(['activity', 'report'] as Tab[]).map((t) => (
+            <Pressable key={t} onPress={() => setTab(t)} hitSlop={8}>
+              <Text style={[styles.tabText, tab === t && styles.tabTextActive]}>
+                {t === 'activity' ? 'Activity' : 'Report'}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
       </View>
 
       {!listenerEnabled && (
@@ -56,18 +70,22 @@ export default function HomeScreen() {
         </Pressable>
       )}
 
-      <FlatList
-        data={all}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <TransactionRow txn={item} onPress={() => openTransaction(item)} />
-        )}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.text} />
-        }
-        ListEmptyComponent={<Text style={styles.empty}>No transactions captured yet.</Text>}
-        contentContainerStyle={all.length === 0 && styles.emptyContainer}
-      />
+      {tab === 'report' ? (
+        <ReportView transactions={all} />
+      ) : (
+        <FlatList
+          data={all}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => (
+            <TransactionRow txn={item} onPress={() => openTransaction(item)} />
+          )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.text} />
+          }
+          ListEmptyComponent={<Text style={styles.empty}>No transactions captured yet.</Text>}
+          contentContainerStyle={all.length === 0 && styles.emptyContainer}
+        />
+      )}
     </View>
   );
 }
@@ -79,6 +97,9 @@ const styles = StyleSheet.create({
   summaryRow: { flexDirection: 'row', gap: 28, marginTop: 16 },
   summaryLabel: { color: theme.subtext, fontSize: 11, fontWeight: '600', letterSpacing: 1 },
   summaryValue: { color: theme.text, fontSize: 18, fontWeight: '700', marginTop: 2 },
+  tabRow: { flexDirection: 'row', gap: 20, marginTop: 20 },
+  tabText: { color: theme.faint, fontSize: 14, fontWeight: '700' },
+  tabTextActive: { color: theme.text },
   banner: {
     marginHorizontal: 16,
     marginBottom: 10,
