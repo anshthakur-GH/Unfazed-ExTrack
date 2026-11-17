@@ -20,15 +20,6 @@ direction straight out of the notification, and asks one quick question: *what w
 Nothing is ever uploaded. There is no account, no server, and no network call: every
 transaction lives in a local SQLite database on the phone.
 
-## Supported banks
-
-| Bank | Credit | Debit |
-|---|:--:|:--:|
-| IDFC FIRST Bank | ✓ | ✓ |
-| Kotak Mahindra Bank | ✓ | ✓ |
-| Bank of Baroda | ✓ | ✓ |
-| India Post Payments Bank (IPPB) | ✓ | ✓ |
-
 Each bank phrases its alerts differently (`credited with INR`, `Sent Rs.`, `Dr. from A/C`,
 `Debit Rs. … for UPI`, and so on). The parser in
 [`src/lib/parseBankNotification.ts`](src/lib/parseBankNotification.ts) handles each form and
